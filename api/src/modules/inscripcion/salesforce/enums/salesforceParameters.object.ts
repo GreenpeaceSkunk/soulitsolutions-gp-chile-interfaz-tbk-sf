@@ -1,0 +1,22 @@
+const SFStaticParameters = {
+  CampaignID: "7017X000000dOIe",
+  Country_of_Ownership: "Chile",
+  ActionTypeM: "New Regular Gift",
+  ActionTypeOO: "New One-off Gift",
+  ActionTypeSuccess: true,
+  Contact_Source_PicklistDD: "Cupón Diálogo Directo",
+  Contact_Source_PicklistWEB: "Formulario Página Web",
+  Contact_Phone_Mobile_Int: true,
+  Regular_Giving_FrequencyM: "12",
+  Regular_Giving_FrequencyOO: "none",
+  CurrencyIsoCode: "CLP",
+  Regular_Giving_Payment_Method: "OneClick",
+  PaymentMethodSubType: "Transbank",
+  AccountType: "none",
+  Transaction_Already_Paid: false,
+  Transaction_Payment_Method: "Transbank",
+  Contact_Primary_CountryCode: "CL",
+  RecordTypeId: "0127X000001hMC5",
+  s360aie__ProcessName__c: "DDC",
+};
+export default SFStaticParameters;
