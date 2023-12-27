@@ -6,7 +6,6 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
-  isURL,
 } from "class-validator";
 
 class InscripcionRequestDTO {
@@ -150,6 +149,15 @@ class InscripcionRequestDTO {
   @IsString()
   @Expose()
   public tarjetaHabienteNombre: string;
+
+  @IsDefined()
+  @IsString()
+  @Expose()
+  public apiResponseUrl: string;
+
+  @IsString()
+  @Expose()
+  public apiResponseUrlParams: string;
 }
 
 export default InscripcionRequestDTO;
