@@ -7,12 +7,12 @@ import sequelize from "@/config/db-config";
 import LogsEvents from "@/modules/logs/enums/logsEvents";
 import inscripcionTransbank from "./inscripcionTransbank";
 import ClienteStates from "@/modules/cliente/enums/clienteStates.enum";
-import { TRANSBANK } from "@/config/config";
 import {
   createTransaccionInscripcion,
   updateTransaccionInscripcion,
 } from "../transaccion/transaccionInscripcion";
 import createLog from "../logs/createLog";
+import { parseUrl } from "@/commons/utils";
 
 async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
   try {
@@ -40,7 +40,7 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
 
       const transaccion = await TransaccionModel.create(
         {
-          response_url: TRANSBANK.RESPONSE_URL,
+          response_url: data.apiResponseUrl,
           tipo_de_transaccion: TransaccionTypes.Inscripcion,
           utm_campaign: data.utmCampaign,
           utm_content: data.utmContent,
@@ -63,7 +63,8 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
     console.log(result);
 
     const transaccionId = result.transaccion.get("id");
-    const reqLog = `${data.nombre},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
+    const apiResponseUrl = parseUrl(`${data.apiResponseUrl}?TRANSACCION_ID=${transaccionId}`, data.apiResponseUrlParams);
+    const reqLog = `${data.nombre},${data.email}, ${apiResponseUrl}`;
     // Loguea transaccion creada correctamente
     createLog(
       transaccionId,

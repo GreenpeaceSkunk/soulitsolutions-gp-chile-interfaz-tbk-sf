@@ -14,6 +14,3 @@ export const API_MYSQL = {
   PUBLISHPORT: process.env.API_MYSQL_PUBLISH_PORT,
   PORT: Number(process.env.API_MYSQL_PORT) || 3306,
 };
-export const TRANSBANK = {
-  RESPONSE_URL: process.env.API_RESPONSE_URL , 
-};

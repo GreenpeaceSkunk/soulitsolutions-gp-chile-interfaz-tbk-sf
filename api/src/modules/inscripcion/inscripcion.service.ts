@@ -93,7 +93,7 @@ class InscripcionService {
       if (generatedStaging.correct) {
         console.log("Se genero el staging correctamente");
         console.log("Se procede a enviar el mail");
-        
+		    
         const bodyInscripcion=createEmailBodyInscripcion(generatedStaging.cliente, responseValues.response, new Date().toISOString().split("T")[0],generatedStaging.transaccion); 
         sendEmail(
           generatedStaging.cliente.email,

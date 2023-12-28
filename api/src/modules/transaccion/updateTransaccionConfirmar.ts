@@ -1,7 +1,6 @@
 import InscripcionDTO from "../inscripcion/dtos/inscripcionRequestDTO";
 import TransaccionStates from "./enums/transaccionStates";
 import TransaccionTypes from "./enums/transaccionTypes";
-import { TRANSBANK } from "@/config/config";
 import TransaccionModel from "@/modules/transaccion/transaccion.model";
 // // {
 //   "response_code": 0,
