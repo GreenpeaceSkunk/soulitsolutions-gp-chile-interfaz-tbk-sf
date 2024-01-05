@@ -20,7 +20,7 @@ async function inscripcionNewCampaign(data: InscripcionDTO, cliente: any, respon
       data,
       cliente,
     );
-    console.log('transaccionId', transaccionId);
+    console.log(transaccionId);
     // Chequea si se creo correctamente la transaccion
     const apiResponseUrl = parseUrl(`${data.apiResponseUrl}?TRANSACCION_ID=${transaccionId}`, data.apiResponseUrlParams);
     const reqLog = `${data.nombre},${data.email}, ${apiResponseUrl}`;
