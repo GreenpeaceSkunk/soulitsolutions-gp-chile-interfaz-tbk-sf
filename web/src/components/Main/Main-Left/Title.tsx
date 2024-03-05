@@ -9,15 +9,17 @@ const Title: React.FC<TitleProps> = ({ title }) => {
     <Box>
       <Typography
         variant="h1"
+        sx={{
+          width: "150%",
+        }}
+        dangerouslySetInnerHTML={{ __html: title }}
         // sx={{
         //   color: "white" /* Green */,
         //   fontWeight: "bold",
         //   fontSize: "3rem",
         //   textTransform: "uppercase",
         // }}
-      >
-        {title}
-      </Typography>
+      />
     </Box>
   );
 };

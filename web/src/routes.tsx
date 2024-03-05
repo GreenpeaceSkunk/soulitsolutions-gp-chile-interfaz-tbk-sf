@@ -2,6 +2,7 @@ import React from "react";
 import { Route, BrowserRouter, Routes, Navigate } from "react-router-dom";
 import TipoMensual from "./components/views/TipoMensual";
 import TipoUnica from "./components/views/TipoUnica";
+
 const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>

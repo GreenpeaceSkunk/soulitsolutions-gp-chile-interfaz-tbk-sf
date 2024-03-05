@@ -18,6 +18,7 @@ const LoadingPage: React.FC = () => {
   }
 
   const response = async () => {
+    let redirect_endpoint = "/";
     try {
       const call = await axios
         .post(
@@ -34,18 +35,22 @@ const LoadingPage: React.FC = () => {
         )
         .then((response) => {
           setLastJson(response.data.data);
+          if(response.data.data.tipo_donacion == "One off"){
+            redirect_endpoint = "/unica";
+          }
           if (response.data.data.response_code == 0) {
-            navigate("/", {
+            
+            navigate(redirect_endpoint, {
               state: { name: response.data.name },
             });
           } else {
-            navigate("/", {
+            navigate(redirect_endpoint, {
               state: { transactionError: true },
             });
           }
         })
         .catch((error) => {
-          navigate("/", {
+          navigate(redirect_endpoint, {
             state: { transactionError: true },
           });
           console.log(`Error desde el front ${error}`);

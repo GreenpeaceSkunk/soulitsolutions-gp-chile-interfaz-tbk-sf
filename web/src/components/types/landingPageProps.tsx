@@ -13,6 +13,7 @@ interface LandingPageProps {
   formTitle: string;
   formSubtitle: string;
   backgroundImage: string;
+  ipcText: string;
 }
 
 export default LandingPageProps;

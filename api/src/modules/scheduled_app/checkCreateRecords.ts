@@ -18,6 +18,7 @@ import {
 } from "./email/successEmailTemplate";
 import sendEmail from "../inscripcion/email/sendEmail";
 import TransaccionModel from "@/modules/transaccion/transaccion.model";
+import donationType from "../transaccion/enums/donationType";
 const checkCreateRecords = async (token: string, data: PagosResponse) => {
   const records = data.records;
 
@@ -27,6 +28,7 @@ const checkCreateRecords = async (token: string, data: PagosResponse) => {
       console.log("Regular Giving:", record.s360a__RegularGiving__c);
       console.log("Amount:", record.Amount);
       console.log("Name:", record.s360a__RegularGiving__r.Name);
+      record.s360a__Contact__r.RUN__c = record.s360a__Contact__r.RUN__c.toUpperCase();
       console.log("RUN:", record.s360a__Contact__r.RUN__c);
 
       // Recorrer cada record y crear un registro en la tabla de transacciones
@@ -45,7 +47,11 @@ const checkCreateRecords = async (token: string, data: PagosResponse) => {
         record
       );
 
-      const authorizeTBK = await autorizarTransbank(record);
+      let authorizeTBK = await autorizarTransbank(record);
+      const authTBKRequest = authorizeTBK.request;
+      console.log("AUTH TBK return: ", JSON.stringify(authorizeTBK));
+      authorizeTBK = authorizeTBK.response;
+
       console.log(JSON.stringify(authorizeTBK));
       if (
         !authorizeTBK ||
@@ -70,7 +76,7 @@ const checkCreateRecords = async (token: string, data: PagosResponse) => {
         await createLog(
           transaccionId,
           LogsEvents.TRANSACCION_PAGO_ACTUALIZADA_CORRECTAMENTE,
-          record,
+          authTBKRequest,
           authorizeTBK
         );
         //Crear Transaction Salesforce
@@ -122,7 +128,9 @@ const checkCreateRecords = async (token: string, data: PagosResponse) => {
                 numero_tarjeta: authorizeTBK.card_detail.card_number,
                 codigo_autorizacion: authorizeTBK.details[0].authorization_code,
                 tipo_de_transaccion: TransaccionTypes.Inscripcion,
+                tipo_donacion: donationType.MENSUAL,
               },
+              order: [["createdAt", "DESC"]],
             });
             console.log(
               `Lo que devuelve tipoTarjeta: ${transaccion?.dataValues.tipo_tarjeta}`

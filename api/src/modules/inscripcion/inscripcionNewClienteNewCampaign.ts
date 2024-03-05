@@ -63,7 +63,7 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
     console.log(result);
 
     const transaccionId = result.transaccion.get("id");
-    const reqLog = `${data.nombre},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
+    const reqLog = `${data.rut},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
     // Loguea transaccion creada correctamente
     createLog(
       transaccionId,

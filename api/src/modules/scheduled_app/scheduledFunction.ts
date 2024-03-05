@@ -10,6 +10,8 @@ cron.schedule(time, async () => {
   console.log("Se ejecuta Scheduled app Regular Giving.");
   // Scheduled app Regular Giving
   const createAppRG = await createScheduledAppRG();
+
+  console.log("Se ejecuta Scheduled app One off");
   // Scheduled app One Off
   const createAppOO = await createScheduledAppOO();
 });

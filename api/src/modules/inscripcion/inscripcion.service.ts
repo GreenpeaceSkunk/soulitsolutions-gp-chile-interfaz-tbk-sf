@@ -23,12 +23,14 @@ interface CustomResponse {
     response: any;
     finishTBKDate: string;
     lastFourDigits: string | null;
+    nombre_banco: string | null;
   };
   name?: string;
 }
 class InscripcionService {
   async create(data: InscripcionDTO): Promise<void | null> {
     // Chequear si el rut existe en la tabla "Cliente"
+    data.rut = data.rut.toUpperCase()
     const cliente = await ClienteModel.findOne({
       where: { rut: data.rut },
       attributes: ["id"],
@@ -55,12 +57,14 @@ class InscripcionService {
       req.body,
       TransaccionStates.CONFIRMACION_PENDIENTE,
       null,
+      null,
       null
     );
     const responseValues = await finalizarInscripcionTBK(req.body);
     const clienteID = await updateClienteConfirmar(req.body);
 
     const lastFourDigits = responseValues.lastFourDigits;
+    const nombre_banco = responseValues.nombre_banco
 
     if (
       responseValues.response.response_code === 0 &&
@@ -69,7 +73,7 @@ class InscripcionService {
       await createLog(
         req.body.transaccionId,
         LogsEvents.TRANSACCION_CONFIRMADA,
-        req.body.token,
+        req.body,
         responseValues.response
       );
 
@@ -77,7 +81,8 @@ class InscripcionService {
         req.body,
         TransaccionStates.CONFIRMADA_TBK,
         responseValues.response,
-        lastFourDigits
+        lastFourDigits,
+        nombre_banco 
       );
       // Continuar con Saleforce y generarStaging
 
@@ -102,7 +107,7 @@ class InscripcionService {
         );
         return {
           status: 201,
-          data: responseValues.response,
+          data: {...responseValues.response, tipo_donacion: generatedStaging.transaccion.tipo_donacion},
           name: generatedStaging.cliente.nombre,
         };
       } else {
@@ -122,7 +127,8 @@ class InscripcionService {
         req.body,
         TransaccionStates.ERROR,
         responseValues.response,
-        lastFourDigits
+        lastFourDigits,
+        nombre_banco
       );
       return {
         status: 400,

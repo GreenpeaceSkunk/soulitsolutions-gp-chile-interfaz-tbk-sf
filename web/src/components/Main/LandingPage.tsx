@@ -66,6 +66,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   formTitle,
   formSubtitle,
   backgroundImage,
+  ipcText,
 }) => {
   return (
     <ThemeProvider theme={theme_config}>
@@ -126,6 +127,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 amounts={amounts}
                 formTitle={formTitle}
                 formSubtitle={formSubtitle}
+                ipcText={ipcText}
               />
             </Grid>
           </Grid>
