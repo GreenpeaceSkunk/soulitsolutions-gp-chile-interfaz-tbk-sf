@@ -125,6 +125,10 @@ const Transaction = sequelize.define(
       type: DataTypes.STRING(200),
       allowNull: true,
     },
+    nombre_banco: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
   },
   {
     // Additional options for the model go here

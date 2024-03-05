@@ -71,6 +71,7 @@ export class InscripcionController {
         req.body,
         TransaccionStates.ERROR,
         null,
+        null,
         null
       );
       res.status(400).json(error);

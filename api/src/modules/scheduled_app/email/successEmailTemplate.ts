@@ -9,7 +9,7 @@ const createEmailSuccessBody = (
   if (transaccion.tipo_donacion === donationType.MENSUAL) {
     message = "mensual";
   } else {
-    message = "único";
+    message = "única";
   }
   const successEmailTemplate = `
   <html>

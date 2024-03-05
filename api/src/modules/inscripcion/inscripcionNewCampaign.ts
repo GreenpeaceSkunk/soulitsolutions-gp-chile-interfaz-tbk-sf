@@ -22,7 +22,7 @@ async function inscripcionNewCampaign(data: InscripcionDTO, cliente: any) {
     console.log(transaccionId);
     // Chequea si se creo correctamente la transaccion
 
-    const reqLog = `${data.nombre},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
+    const reqLog = `${data.rut},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
     if (transaccionId !== null) {
       // Loguea transaccion creada correctamente
 

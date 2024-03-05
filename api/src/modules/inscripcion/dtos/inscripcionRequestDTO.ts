@@ -6,7 +6,6 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
-  isURL,
 } from "class-validator";
 
 class InscripcionRequestDTO {

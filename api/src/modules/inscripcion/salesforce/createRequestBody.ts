@@ -34,8 +34,10 @@ function createRequestBody(clienteSF: any, transaccionSF: any) {
     s360aie__Regular_Giving_Frequency__c: "",
     CurrencyIsoCode: SFStaticParameters.CurrencyIsoCode,
     s360aie__Regular_Giving_Amount__c: transaccionSF.monto,
-    s360aie__Regular_Giving_Payment_Method__c:
-      SFStaticParameters.Regular_Giving_Payment_Method,
+  //1
+    s360aie__Regular_Giving_Payment_Method__c: 
+      transaccionSF.tipo_donacion === donationType.MENSUAL 
+      ? SFStaticParameters.Regular_Giving_Payment_Method : "",
     PaymentMethodSubType__c: SFStaticParameters.PaymentMethodSubType,
     AccountType__c: SFStaticParameters.AccountType,
     AccountHolderRUN__c: "",
@@ -45,24 +47,39 @@ function createRequestBody(clienteSF: any, transaccionSF: any) {
     card_tbk__c: transaccionSF.tipo_tarjeta,
     user_tbk__c: transaccionSF.tbk_user,
     authorization_code_tbk__c: transaccionSF.codigo_autorizacion,
+
+    BIN_Bank__c: transaccionSF.nombre_banco,
+    
     gpi__utm_campaign__c: transaccionSF.utm_campaign,
     gpi__utm_content__c: transaccionSF.utm_content,
     gpi__utm_medium__c: transaccionSF.utm_medium,
     gpi__utm_source__c: transaccionSF.utm_source,
     gpi__utm_term__c: transaccionSF.utm_term,
+  //2
     s360aie__Transaction_Amount__c:
       transaccionSF.tipo_donacion === donationType.MENSUAL
         ? null
         : transaccionSF.monto,
     s360aie__Transaction_Already_Paid__c:
       SFStaticParameters.Transaction_Already_Paid,
+  //3
     s360aie__Transaction_Payment_Method__c:
-      SFStaticParameters.Transaction_Payment_Method,
+      transaccionSF.tipo_donacion === donationType.MENSUAL ? 
+      SFStaticParameters.Transaction_Payment_Method : SFStaticParameters.Regular_Giving_Payment_Method,
     s360aie__Contact_Primary_CountryCode__c:
       SFStaticParameters.Contact_Primary_CountryCode,
     RecordTypeId: String(process.env.API_SF_RECORDTYPEID),
-    s360aie__ProcessName__c: SFStaticParameters.s360aie__ProcessName__c,
+  //4
+    s360aie__ProcessName__c: transaccionSF.tipo_donacion === donationType.MENSUAL ? 
+        SFStaticParameters.s360aie__ProcessName__c : SFStaticParameters.Process_Name_One_Off,
     s360aie__DDC_Signup_Date__c: new Date().toISOString().split("T")[0],
+  
+    s360aie__Regular_Giving_Start_Date__c: 
+    transaccionSF.tipo_donacion === donationType.MENSUAL
+        ? null
+        : transaccionSF.tipo_donacion,
+
+    s360aie__Contact_Date_of_Birth2__c: clienteSF.fecha_nacimiento,
   };
 
   switch (transaccionSF.utm_source) {
@@ -87,10 +104,15 @@ function createRequestBody(clienteSF: any, transaccionSF: any) {
     requestBody.s360aie__ActionType__c = SFStaticParameters.ActionTypeM;
     requestBody.s360aie__Regular_Giving_Frequency__c =
       SFStaticParameters.Regular_Giving_FrequencyM;
+  //2 ??
+    delete requestBody.s360aie__Transaction_Amount__c;
+
   } else {
     requestBody.s360aie__ActionType__c = SFStaticParameters.ActionTypeOO;
     requestBody.s360aie__Regular_Giving_Frequency__c =
       SFStaticParameters.Regular_Giving_FrequencyOO;
+      //5
+    delete requestBody.s360aie__Regular_Giving_Start_Date__c;
   }
 
   if (transaccionSF.titular == false) {
@@ -112,6 +134,13 @@ function createRequestBody(clienteSF: any, transaccionSF: any) {
       .getDate()
       .toString();
   }
+
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  if(transaccionSF.tipo_donacion === donationType.MENSUAL){
+    requestBody.s360aie__Regular_Giving_Start_Date__c = tomorrow.toISOString().split("T")[0];
+  }
+  
 
   return requestBody;
 }

@@ -6,7 +6,7 @@ async function getPagosOneOff(token: string): Promise<PagosOOResponse> {
   // Creo la url
   const baseUrl = process.env.API_URL_GET_PAGOS;
   const query = encodeURIComponent(
-    "SELECT ID, s360a__Status2__c, s360a__Amount__c, s360a__Opportunity__r.ID, s360a__Opportunity__r.s360a__Contact__r.RUN__C, s360a__Opportunity__r.TBK_User_Opp__c FROM s360a__Transaction2__c WHERE s360a__Status2__c = 'Awaiting Payment' AND s360a__PaymentMethod__c = 'Transbank'"
+    "SELECT ID, s360a__Status2__c, s360a__Amount__c, s360a__Opportunity__r.ID, s360a__Opportunity__r.s360a__Contact__r.RUN__C, s360a__Opportunity__r.TBK_User_Opp__c FROM s360a__Transaction2__c WHERE s360a__Status2__c = 'Awaiting Payment' AND s360a__PaymentMethod__c = 'OneClick' AND s360a__Opportunity__r.TBK_User_Opp__c <> '' "
   );
 
   const url = `${baseUrl}?q=${query}`;

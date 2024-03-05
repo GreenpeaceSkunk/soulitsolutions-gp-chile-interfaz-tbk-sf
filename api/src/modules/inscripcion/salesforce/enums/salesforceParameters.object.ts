@@ -18,5 +18,6 @@ const SFStaticParameters = {
   Contact_Primary_CountryCode: "CL",
   RecordTypeId: "0127X000001hMC5",
   s360aie__ProcessName__c: "DDC",
+  Process_Name_One_Off: "TFRImport",
 };
 export default SFStaticParameters;

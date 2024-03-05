@@ -9,6 +9,7 @@ import sendEmailError from "../scheduled_app/email/sendEmailError";
 import parseDate from "../scheduled_app/utils/parseDate";
 import LogsEvents from "../logs/enums/logsEvents";
 import AutorizarStatus from "../scheduled_app/autorizar/enums/autorizarStatus";
+import donationType from "./enums/donationType";
 
 const createTransaccionScheduledApp = async (
   transaccionType: TransaccionTypes,
@@ -35,6 +36,7 @@ const createTransaccionScheduledApp = async (
         monto: data.Amount,
         cliente_id: cliente.dataValues.id,
         estado: transaccionState, // CREADA
+        tipo_donacion: donationType.MENSUAL,
       });
       // Check if the transaction was created successfully
       if (!transaccion) {
@@ -73,6 +75,7 @@ const createTransaccionScheduledAppOO = async (
         cliente_id: cliente.dataValues.id,
         estado: transaccionState, // CREADA
         transaccion_salesforce: data.Id,
+        tipo_donacion: donationType.UNICA,
       });
       // Check if the transaction was created successfully
       if (!transaccion) {

@@ -23,6 +23,7 @@ interface FormProps {
   amounts: Array<{ label: string; value: number }>;
   formTitle: string;
   formSubtitle: string;
+  ipcText: string;
 }
 const Form: React.FC<FormProps> = ({
   enableBirthdate,
@@ -35,6 +36,7 @@ const Form: React.FC<FormProps> = ({
   amounts,
   formTitle,
   formSubtitle,
+  ipcText,
 }) => {
   const [showMontoField, setShowMontoField] = useState(false);
   const [montoField, setMontoField] = useState(0);
@@ -51,9 +53,7 @@ const Form: React.FC<FormProps> = ({
       {/* Your modal and other components */}
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="inherit" align="center" gutterBottom>
-            {formTitle}
-          </Typography>
+          <Typography variant="inherit" align="center" gutterBottom dangerouslySetInnerHTML={{ __html: formTitle }} />
           <Divider
             sx={{
               width: "100%",
@@ -62,9 +62,7 @@ const Form: React.FC<FormProps> = ({
             }}
           />
           <br />
-          <Typography variant="caption" align="center" gutterBottom>
-            {formSubtitle}
-          </Typography>
+          <Typography variant="caption" align="center" gutterBottom dangerouslySetInnerHTML={{ __html: formSubtitle }} />
           <br />
           <br />
           <Divider
@@ -76,7 +74,7 @@ const Form: React.FC<FormProps> = ({
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="subtitle1" marginBottom={"10px"} align="center" mt={2}>
+          <Typography variant="subtitle1" marginBottom={"10px"} align="center" mt={1}>
             Elige un monto:
             <br />
           </Typography>
@@ -86,6 +84,16 @@ const Form: React.FC<FormProps> = ({
             amounts={amounts}
           />
         </Grid>
+        <Typography
+          variant="caption"
+          align="center"
+          sx={{
+            mt: 4,
+          }}
+          gutterBottom
+        >
+          {ipcText}
+        </Typography>
         <Grid item xs={12}>
           <Inputs
             showMontoField={showMontoField}
