@@ -127,7 +127,11 @@ const Inputs: React.FC<InputsProps> = ({
       try {
         console.log(data);
         const response = await axios
-          .post(`${process.env.REACT_APP_API_URL}/inscripcion`, data, {
+          .post(`${process.env.REACT_APP_API_URL}/inscripcion`, {
+            ...data,
+            apiResponseUrl: `${window.location.origin}${window.location.pathname}`,
+            apiResponseUrlParams: `${window.location.search}`,
+          }, {
             headers: {
               "Content-Type": "application/json",
             },
