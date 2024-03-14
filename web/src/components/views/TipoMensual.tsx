@@ -46,19 +46,24 @@ const TipoMensual = () => {
   const MONTO_MAXIMO = 45000;
 
   // Textos
-  const TITLE = "EL PLANETA ES NUESTRO HOGAR `Mensual`";
+  const TITLE = "El hogar de todas y todos nos necesita. Actuemos por el planeta. <br>";
 
   const SUBTITLE =
-    "Todos nuestros recursos provienen de donaciones particulares de personas como vos, que deciden apoyar campañas para seguir defendiendo el planeta.";
+    "<br>Estás a un paso de convertirte en activista por el medioambiente. <br> <br>"
+    + "En Greenpeace <b>NO</b> aceptamos dinero de empresas, partidos políticos ni gobiernos. <br>Nuestra libertad e independencia <b>siempre</b> está presente. <br> <br>"
+    + "El aporte económico mensual que realizan nuestros donantes se convierte en acción por la protección y defensa de los bosques, océanos, mares, playas y todos los ecosistemas. <br>";
 
   const DESCTEXT =
-    "No recibimos aportes de empresas, partidos políticos ni gobiernos. Somos 100% independientes. Juntos podremos continuar nuestro trabajo con libertad de acción. ¡Sumate ahora, con vos somos más!";
+    "Ayúdanos a respetar y cuidar a la Naturaleza 💚";
 
   const FORMTITLE =
-    "Apoyar a Greenpeace en defensa del planeta. ¡Juntos podemos hacer la diferencia!";
+    "Para transformar la realidad necesitamos todo el apoyo posible. El primer paso <b>está a sólo un click, la decisión es tuya.</b>";
 
   const FORMSUBTITLE =
-    "Una donación mensual es la mejor opción: nos ayuda a planificar acciones y campañas.";
+    "Buscamos soluciones y generamos cambios, cada donación <b>SÍ</b> hace la diferencia. Elige el monto de tu donación mensual";
+
+  const IPC_TEXT = 
+    "*Tu donación mensual se reajustará cada año según IPC* \nSi tienes dudas contáctate con nosotros"
 
   const landingPageProps: LandingPageProps = {
     enableBirthdate: HABILITAR_FECHA_NACIMIENTO,
@@ -75,6 +80,7 @@ const TipoMensual = () => {
     formTitle: FORMTITLE,
     formSubtitle: FORMSUBTITLE,
     backgroundImage: BACKGROUND_IMAGE,
+    ipcText: IPC_TEXT,
   };
   return <LandingPage {...landingPageProps} />;
 };

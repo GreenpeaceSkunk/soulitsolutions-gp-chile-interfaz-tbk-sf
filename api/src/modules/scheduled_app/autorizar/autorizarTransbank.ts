@@ -9,7 +9,7 @@ import {
 
 const autorizarTransbank = async (
   data: PagosRecord | TransactionOO
-): Promise<AutorizarTBK | null> => {
+): Promise<any | null> => {
   try {
     // Type guard function for PagosRecord
     function isPagosRecord(
@@ -40,6 +40,7 @@ const autorizarTransbank = async (
         String(process.env.API_TBK_ENVIRONMENT)
       )
     );
+    let authTBKRequest = null;
     let autorizarTBKFields;
     if (isPagosRecord(data)) {
       autorizarTBKFields = {
@@ -58,7 +59,7 @@ const autorizarTransbank = async (
         commerceCode: String(process.env.API_TBK_COMMERCE_CODE_STORE),
       };
     }
-
+    
     if (autorizarTBKFields) {
       const details = [
         new TransactionDetail(
@@ -67,13 +68,20 @@ const autorizarTransbank = async (
           autorizarTBKFields.buyOrder
         ),
       ];
+      authTBKRequest = {
+        username: autorizarTBKFields?.username,
+        tbkUser: autorizarTBKFields?.tbkUser,
+        buyOrder: autorizarTBKFields?.buyOrder,
+        details: details,
+      }
+      console.log("AUTH TBK REQUEST: ", JSON.stringify(authTBKRequest));
       const response = await tx.authorize(
         autorizarTBKFields.username,
         autorizarTBKFields.tbkUser,
         autorizarTBKFields.buyOrder,
         details
       );
-      return response;
+      return {response: response, request: authTBKRequest};
     } else {
       console.log(
         `Lo que se recibio de data: ${JSON.stringify(

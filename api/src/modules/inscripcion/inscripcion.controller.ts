@@ -27,6 +27,7 @@ export class InscripcionController {
     try {
       const requestData: InscripcionDTO = res.locals.validatedBody;
       console.log(requestData);
+    
       const response = await this.inscripcionService.create(requestData);
       if (response !== null) {
         res.status(201).json(response);
@@ -70,6 +71,7 @@ export class InscripcionController {
       await updateTransaccionConfirmar(
         req.body,
         TransaccionStates.ERROR,
+        null,
         null,
         null
       );

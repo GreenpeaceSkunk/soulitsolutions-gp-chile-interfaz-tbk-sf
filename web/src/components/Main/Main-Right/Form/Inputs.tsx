@@ -8,9 +8,10 @@ import {
   Box,
   Checkbox,
   FormControlLabel,
+  Typography,
 } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, set } from "react-hook-form";
 import { formatRut, validateRut, RutFormat } from "@fdograph/rut-utilities";
 import RedirectPage from "@/components/RedirectPage";
 import LoadingPage from "@/components/LoadingPage";
@@ -41,6 +42,7 @@ type FormValues = {
   titular: boolean;
   tarjetaHabienteRut: string;
   tarjetaHabienteNombre: string;
+  response_url: string;
 };
 
 interface InputsProps {
@@ -122,6 +124,7 @@ const Inputs: React.FC<InputsProps> = ({
         return;
       }
       data.prefijo = data.prefijo.replace(/\+/g, "");
+      data.response_url = response_url;
 
       // alert(JSON.stringify(data));
       try {
@@ -170,8 +173,22 @@ const Inputs: React.FC<InputsProps> = ({
     (country) => country.code === "CL"
   )?.regions?.find((region) => region.name === selectedRegionWatch);
 
-  // Extract and filter provinces based on the selected region
-  const selectedProvinces = selectedRegionFilter?.provinces || [];
+ // extract and filter comunas bsed on the selected region through provinces
+const selectedCommunes = selectedRegionFilter?.provinces?.flatMap(
+  (province) => {
+    let temp = province.communes.map((commune) => {
+      return {
+        code: commune.code,
+        name: commune.name,
+        province: province.name,
+      }
+    })
+    return temp || []
+  }
+) || [];
+
+  // // Extract and filter provinces based on the selected region
+  // const selectedProvinces = selectedRegionFilter?.provinces || [];
 
   // Find the selected province within "Chile"
   const selectedProvinceV = TestCountriesV2.find(
@@ -181,7 +198,7 @@ const Inputs: React.FC<InputsProps> = ({
     .find((province) => province.name === selectedProvinciaWatch);
 
   // Extract and filter communes based on the selected province
-  const selectedCommunes = selectedProvinceV?.communes || [];
+  //const selectedCommunes = selectedProvinceV?.communes || [];
   const [showPais, setShowPais] = useState<boolean>(false);
   useEffect(() => {
     if (selectedRegionWatch === "Otro País") {
@@ -194,6 +211,7 @@ const Inputs: React.FC<InputsProps> = ({
       setShowPais(false);
     }
   }, [selectedRegionWatch]);
+
 
   useEffect(() => {
     if (paymentData) {
@@ -213,6 +231,8 @@ const Inputs: React.FC<InputsProps> = ({
 
   let query = useQuery();
   // Valores UTM
+  const response_url = window.location.href.split("?")[0];
+  
   const utmSource = query.get("utm_source");
   const utmMedium = query.get("utm_medium");
   const utmContent = query.get("utm_content");
@@ -228,6 +248,8 @@ const Inputs: React.FC<InputsProps> = ({
     return <LoadingPage />;
   }
   // Logica card holder
+
+
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsCardHolder(event.target.checked);
@@ -300,7 +322,6 @@ const Inputs: React.FC<InputsProps> = ({
           InputProps={{ style: { backgroundColor: "white" } }}
         />
       </Collapse>
-
       {enableCardholderInfo && (
         <>
           <FormControlLabel
@@ -615,7 +636,7 @@ const Inputs: React.FC<InputsProps> = ({
           {selectedRegionWatch !== "Otro País" &&
             selectedRegionWatch !== "" && (
               <Collapse in={!showPais}>
-                <Box marginTop="0.5rem">
+                {/* {<Box marginTop="0.5rem">
                   <Controller
                     name="provincia" // Specify the name for this field
                     control={control} // Pass the control prop from useForm
@@ -664,7 +685,7 @@ const Inputs: React.FC<InputsProps> = ({
                       />
                     )}
                   />
-                </Box>
+                </Box>} */}
 
                 <Box marginTop="0.5rem">
                   <Controller
@@ -679,9 +700,13 @@ const Inputs: React.FC<InputsProps> = ({
                         options={selectedCommunes}
                         autoHighlight
                         getOptionLabel={(option) => option.name}
-                        onChange={(_, value) => field.onChange(value.name)} // Update the field value on change
+                        onChange={(_, value) => {
+                          field.onChange(value.name);
+                          setValue("provincia", value.province);
+                          console.log(form.getValues());
+                        }} // Update the field value on change
                         onBlur={() => field.onBlur()} // Handle onBlur event
-                        // value={field.value} // Set the value from the field
+                        // Set the value from the field
                         renderOption={(props, option) => (
                           <Box
                             component="li"
@@ -693,7 +718,7 @@ const Inputs: React.FC<InputsProps> = ({
                             }}
                             {...props}
                           >
-                            {option?.name}
+                            {option.name}
                           </Box>
                         )}
                         renderInput={(params) => (

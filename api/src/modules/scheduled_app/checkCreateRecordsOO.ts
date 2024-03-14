@@ -18,6 +18,7 @@ import {
   successEmailSubject,
 } from "./email/successEmailTemplate";
 import TransaccionModel from "@/modules/transaccion/transaccion.model";
+import donationType from "../transaccion/enums/donationType";
 const checkCreateRecordsOO = async (token: string, data: PagosOOResponse) => {
   const records = data.records;
 
@@ -48,7 +49,11 @@ const checkCreateRecordsOO = async (token: string, data: PagosOOResponse) => {
         record
       );
 
-      const authorizeTBK = await autorizarTransbank(record);
+      let authorizeTBK = await autorizarTransbank(record);
+      const authTBKRequest = authorizeTBK.request;
+      console.log("AUTH TBK return: ", JSON.stringify(authorizeTBK));
+      authorizeTBK = authorizeTBK.response;
+
       console.log(JSON.stringify(authorizeTBK));
       if (
         !authorizeTBK ||
@@ -73,7 +78,7 @@ const checkCreateRecordsOO = async (token: string, data: PagosOOResponse) => {
         await createLog(
           transaccionId,
           LogsEvents.TRANSACCION_PAGO_ACTUALIZADA_CORRECTAMENTE,
-          record,
+          authTBKRequest,
           authorizeTBK
         );
         //PATCH Transaction Salesforce
@@ -128,7 +133,9 @@ const checkCreateRecordsOO = async (token: string, data: PagosOOResponse) => {
                 numero_tarjeta: authorizeTBK.card_detail.card_number,
                 codigo_autorizacion: authorizeTBK.details[0].authorization_code,
                 tipo_de_transaccion: TransaccionTypes.Inscripcion,
+                tipo_donacion: donationType.UNICA,
               },
+              order: [["createdAt", "DESC"]],
             });
             console.log(
               `Lo que devuelve tipoTarjeta: ${transaccion?.dataValues.tipo_tarjeta}`
