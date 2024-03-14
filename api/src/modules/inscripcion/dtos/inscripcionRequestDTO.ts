@@ -150,10 +150,14 @@ class InscripcionRequestDTO {
   @Expose()
   public tarjetaHabienteNombre: string;
 
-
+  @IsDefined()
   @IsString()
   @Expose()
   public response_url: string;
+
+  @IsString()
+  @Expose()
+  public apiResponseUrlParams: string;
 }
 
 export default InscripcionRequestDTO;

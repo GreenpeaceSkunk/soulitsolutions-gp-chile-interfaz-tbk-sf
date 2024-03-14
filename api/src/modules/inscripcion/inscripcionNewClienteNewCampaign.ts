@@ -12,6 +12,7 @@ import {
   updateTransaccionInscripcion,
 } from "../transaccion/transaccionInscripcion";
 import createLog from "../logs/createLog";
+import { parseUrl } from "@/commons/utils";
 
 async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
   try {
@@ -62,7 +63,8 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
     console.log(result);
 
     const transaccionId = result.transaccion.get("id");
-    const reqLog = `${data.rut},${data.email}, ${data.response_url}?TRANSACCION_ID=${transaccionId}`;
+    const apiResponseUrl = parseUrl(`${data.response_url}?TRANSACCION_ID=${transaccionId}`, data.apiResponseUrlParams);
+    const reqLog = `${data.nombre},${data.email}, ${apiResponseUrl}`;
     // Loguea transaccion creada correctamente
     createLog(
       transaccionId,

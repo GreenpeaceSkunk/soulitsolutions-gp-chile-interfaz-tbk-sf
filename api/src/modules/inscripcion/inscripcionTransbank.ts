@@ -6,6 +6,7 @@ import {
   Options,
 } from "transbank-sdk"; // ES6 Modules
 import InscripcionDTO from "@/modules/inscripcion/dtos/inscripcionRequestDTO";
+import { parseUrl } from "@/commons/utils";
 async function inscripcionTransbank(data: InscripcionDTO, transaccionId: any) {
   try {
     const ins = new Oneclick.MallInscription(
@@ -15,14 +16,15 @@ async function inscripcionTransbank(data: InscripcionDTO, transaccionId: any) {
         String(process.env.API_TBK_ENVIRONMENT)
       )
     );
+    const apiResponseUrl = parseUrl(`${data.response_url}?TRANSACCION_ID=${transaccionId}`, data.apiResponseUrlParams);
     console.log(
-      `Nombre, email y url enviadas a trasbank: ${data.nombre}, ${data.email}, ${data.response_url}`
+      `Nombre, email y url enviadas a trasbank: ${data.nombre}, ${data.email}, ${apiResponseUrl}`
     );
 
     const response = await ins.start(
       data.rut,
       data.email,
-      `${data.response_url}?TRANSACCION_ID=${transaccionId}`
+      apiResponseUrl.replace(/&/g, '%3F'),
     );
     console.log(
       `Atencion datos que se reciben de Transbank: ${JSON.stringify(response)}`

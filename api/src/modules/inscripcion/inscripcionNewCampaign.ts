@@ -9,7 +9,8 @@ import LogsEvents from "@/modules/logs/enums/logsEvents";
 import inscripcionTransbank from "./inscripcionTransbank";
 import { error } from "console";
 import createLog from "../logs/createLog";
-async function inscripcionNewCampaign(data: InscripcionDTO, cliente: any) {
+import { parseUrl } from "@/commons/utils";
+async function inscripcionNewCampaign(data: InscripcionDTO, cliente: any, responseUrl?: string) {
   try {
     // Crea registro en tabla Transacciones
     const transaccionId = await createTransaccionInscripcion(
@@ -20,8 +21,8 @@ async function inscripcionNewCampaign(data: InscripcionDTO, cliente: any) {
     );
     console.log(transaccionId);
     // Chequea si se creo correctamente la transaccion
-
-    const reqLog = `${data.rut},${data.email}, ${data.response_url}?TRANSACCION_ID=${transaccionId}`;
+    const apiResponseUrl = parseUrl(`${data.response_url}?TRANSACCION_ID=${transaccionId}`, data.apiResponseUrlParams);
+    const reqLog = `${data.nombre},${data.email}, ${apiResponseUrl}`;
     if (transaccionId !== null) {
       // Loguea transaccion creada correctamente
 
