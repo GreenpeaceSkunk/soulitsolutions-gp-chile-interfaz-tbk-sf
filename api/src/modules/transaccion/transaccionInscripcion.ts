@@ -1,7 +1,6 @@
 import InscripcionDTO from "../inscripcion/dtos/inscripcionRequestDTO";
 import TransaccionStates from "./enums/transaccionStates";
 import TransaccionTypes from "./enums/transaccionTypes";
-import { TRANSBANK } from "@/config/config";
 import TransaccionModel from "@/modules/transaccion/transaccion.model";
 
 const createTransaccionInscripcion = async (
@@ -12,7 +11,7 @@ const createTransaccionInscripcion = async (
 ) => {
   try {
     const transaccion = await TransaccionModel.create({
-      response_url: TRANSBANK.RESPONSE_URL,
+      response_url: data.response_url,
       tipo_de_transaccion: transaccionType,
       utm_campaign: data.utmCampaign,
       utm_content: data.utmContent,

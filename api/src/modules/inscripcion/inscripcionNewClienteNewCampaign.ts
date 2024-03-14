@@ -7,7 +7,6 @@ import sequelize from "@/config/db-config";
 import LogsEvents from "@/modules/logs/enums/logsEvents";
 import inscripcionTransbank from "./inscripcionTransbank";
 import ClienteStates from "@/modules/cliente/enums/clienteStates.enum";
-import { TRANSBANK } from "@/config/config";
 import {
   createTransaccionInscripcion,
   updateTransaccionInscripcion,
@@ -40,7 +39,7 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
 
       const transaccion = await TransaccionModel.create(
         {
-          response_url: TRANSBANK.RESPONSE_URL,
+          response_url: data.response_url,
           tipo_de_transaccion: TransaccionTypes.Inscripcion,
           utm_campaign: data.utmCampaign,
           utm_content: data.utmContent,
@@ -63,12 +62,20 @@ async function inscripcionNewClienteNewCampaign(data: InscripcionDTO) {
     console.log(result);
 
     const transaccionId = result.transaccion.get("id");
-    const reqLog = `${data.nombre},${data.email}, ${TRANSBANK.RESPONSE_URL}?TRANSACCION_ID=${transaccionId}`;
+    const reqLog = `${data.rut},${data.email}, ${data.response_url}?TRANSACCION_ID=${transaccionId}`;
     // Loguea transaccion creada correctamente
     createLog(
       transaccionId,
       LogsEvents.TRANSACCION_CREADA_CORRECTAMENTE,
       reqLog,
+      null
+    );
+
+    // log del request AQUi porque requiere estar bindeado a una transaccion
+    createLog(
+      transaccionId,
+      LogsEvents.LOG_INPUT,
+      data,
       null
     );
     const response = await inscripcionTransbank(data, transaccionId); // TODO: HTTP RESPONSE

@@ -11,5 +11,6 @@ enum LogsEvents {
   TRANSACCION_CONFIRMADA = "Transacción confirmada.",
   CREACION_DE_CLIENTE_EN_SALESFORCE = "Creación de Cliente en Salesforce.",
   CLIENTE_CREADO_EN_SALESFORCE = "Cliente creado correctamente en Salesforce.",
+  LOG_INPUT = "Log Input.",
 }
 export default LogsEvents;

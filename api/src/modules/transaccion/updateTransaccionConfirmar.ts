@@ -1,7 +1,6 @@
 import InscripcionDTO from "../inscripcion/dtos/inscripcionRequestDTO";
 import TransaccionStates from "./enums/transaccionStates";
 import TransaccionTypes from "./enums/transaccionTypes";
-import { TRANSBANK } from "@/config/config";
 import TransaccionModel from "@/modules/transaccion/transaccion.model";
 // // {
 //   "response_code": 0,
@@ -14,7 +13,8 @@ const updateTransaccionConfirmar = async (
   data: any,
   transaccionState: TransaccionStates,
   response: any,
-  lastFourDigits: string | null
+  lastFourDigits: string | null,
+  nombre_banco: any
 ) => {
   try {
     const updatedTransaccion = await TransaccionModel.update(
@@ -26,6 +26,7 @@ const updateTransaccionConfirmar = async (
         codigo_autorizacion: response?.authorization_code,
         tipo_tarjeta: response?.card_type,
         numero_tarjeta: lastFourDigits,
+        nombre_banco: nombre_banco,
       },
       {
         where: {

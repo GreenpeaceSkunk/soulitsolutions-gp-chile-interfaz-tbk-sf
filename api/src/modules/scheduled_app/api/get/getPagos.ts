@@ -18,10 +18,11 @@ async function getPagos(token: string): Promise<PagosResponse> {
   const query = encodeURIComponent(
     "SELECT Opportunity.s360a__RegularGiving__c, Opportunity.Amount, Opportunity.ID, Opportunity.s360a__RegularGiving__r.TBK_User__c, Opportunity.s360a__RegularGiving__r.Name, Opportunity.s360a__Contact__r.RUN__C " +
       "FROM Opportunity " +
-      "WHERE StageName = 'Open' " +
+      "WHERE ( StageName = 'Open' OR StageName = 'Overdue' ) " +
       `AND CloseDate <= ${closeDate} ` +
       "AND Opportunity.s360a__RegularGiving__r.s360a__CurrentPaymentMethod__c = 'OneClick' " +
-      "AND Opportunity.s360a__RegularGiving__r.Payment_Method_sub_type__c = 'Transbank'"
+      "AND Opportunity.s360a__RegularGiving__r.Payment_Method_sub_type__c = 'Transbank' " +
+      "AND Opportunity.s360a__RegularGiving__r.TBK_User__c <> '' "
   );
 
   const url = `${baseUrl}?q=${query}`;
